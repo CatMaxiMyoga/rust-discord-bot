@@ -1,3 +1,5 @@
+//! Contains the event handler for the bot.
+
 use crate::config::CONFIG as Config;
 use poise::serenity_prelude as serenity;
 use serenity::Context;
@@ -12,7 +14,7 @@ impl serenity::EventHandler for EventHandler {
 
         let embed = CreateEmbed::new()
             .description("Bot is online!")
-        .color(0xFF0000);
+            .color(0xFF0000);
 
         Config
             .ready_channel

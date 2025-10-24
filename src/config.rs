@@ -1,8 +1,8 @@
 //! Contains the Settings
 
+use dotenv::dotenv;
 use once_cell::sync::Lazy;
 use poise::serenity_prelude::{ChannelId, GatewayIntents, GuildId};
-use dotenv::dotenv;
 
 #[derive(Debug)]
 pub struct Config {
@@ -10,7 +10,7 @@ pub struct Config {
     pub guild_id: GuildId,
     pub intents: GatewayIntents,
 
-    pub ready_channel: ChannelId
+    pub ready_channel: ChannelId,
 }
 
 impl Config {
@@ -27,7 +27,7 @@ impl Config {
             token,
             guild_id,
             intents,
-            ready_channel
+            ready_channel,
         }
     }
 }
