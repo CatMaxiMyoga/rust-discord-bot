@@ -56,7 +56,17 @@ async fn main() {
                     Config.guild_id,
                 )
                 .await?;
-                println!("Commands registered.");
+
+                for command in &framework.options().commands {
+                    println!(
+                        "/{}\t  {}",
+                        command.name,
+                        command.description.as_deref().unwrap_or("".into())
+                    );
+                }
+
+                println!("\nCommands registered.");
+
                 Ok(Data {})
             })
         })

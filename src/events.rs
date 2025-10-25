@@ -14,7 +14,7 @@ impl serenity::EventHandler for EventHandler {
 
         let embed = CreateEmbed::new()
             .description("Bot is online!")
-            .color(0xFF0000);
+            .color(0x00FF00);
 
         Config
             .ready_channel
