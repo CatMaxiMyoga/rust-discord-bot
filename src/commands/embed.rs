@@ -280,7 +280,7 @@ fn check_url(input: &str) -> bool {
 
 fn check_image_url(input: &str) -> bool {
     let image_url_regex =
-    Regex::new(r"^(https?://[^\s]+\.(png|jpg|jpeg|gif|webp|bmp))$|^avatar$").unwrap();
+        Regex::new(r"^(https?://[^\s]+\.(png|jpg|jpeg|gif|webp|bmp))$|^avatar$").unwrap();
     image_url_regex.is_match(input)
 }
 

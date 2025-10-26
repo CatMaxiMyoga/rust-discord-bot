@@ -5,7 +5,7 @@ use crate::shared_types::{Data, Error};
 #[poise::command(slash_command, guild_only)]
 pub async fn avatar(
     ctx: poise::Context<'_, Data, Error>,
-    #[description = "The user to get the avatar of"] user: Option<serenity::Member>
+    #[description = "The user to get the avatar of"] user: Option<serenity::Member>,
 ) -> Result<(), Error> {
     let user = match user {
         Some(user) => user.user,
