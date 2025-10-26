@@ -13,7 +13,7 @@ impl serenity::EventHandler for EventHandler {
         println!("{} is connected!", ready.user.display_name());
 
         let embed = CreateEmbed::new()
-            .description("Bot is online!")
+            .description("## Bot is online!")
             .color(0x00FF00);
 
         Config
