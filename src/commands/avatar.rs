@@ -2,6 +2,12 @@ use poise::serenity_prelude::{self as serenity, CreateEmbed};
 
 use crate::shared_types::{Data, Error};
 
+/// Get the avatar of a user or yourself.
+///
+/// Returns the avatar of the specified user or yourself.
+///
+/// If no user is specified, your own avatar will be used. The avatar will be displayed directly \
+/// and a direct link to the avatar will be given.
 #[poise::command(slash_command, guild_only)]
 pub async fn avatar(
     ctx: poise::Context<'_, Data, Error>,

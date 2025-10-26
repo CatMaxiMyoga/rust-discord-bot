@@ -10,24 +10,35 @@ pub struct Config {
     pub guild_id: GuildId,
     pub intents: GatewayIntents,
 
-    pub ready_channel: ChannelId,
+    // Event Log Channels
+    pub ready_event_channel: ChannelId,
+
+    // Command Log Channels
+    pub purge_command_channel: ChannelId,
+
+    // Misc Log Channels
+    pub commands_synced_channel: ChannelId,
 }
 
 impl Config {
     fn new() -> Self {
         dotenv().ok();
 
-        let token = std::env::var("DISCORD_TOKEN").expect("Missing token in .env file");
-        let guild_id = GuildId::new(1018921751691923536);
-        let intents = GatewayIntents::all();
-
-        let ready_channel = ChannelId::new(1239935861370650634);
+        let bot_status_channel = ChannelId::new(1239935861370650634);
 
         Self {
-            token,
-            guild_id,
-            intents,
-            ready_channel,
+            token: std::env::var("DISCORD_TOKEN").expect("Missing token in .env file"),
+            guild_id: GuildId::new(1018921751691923536),
+            intents: GatewayIntents::all(),
+
+            // Event Log Channels
+            ready_event_channel: bot_status_channel,
+
+            // Command Log Channels
+            purge_command_channel: ChannelId::new(1239387297003077682),
+
+            // Misc Log Channels
+            commands_synced_channel: bot_status_channel,
         }
     }
 }

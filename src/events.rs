@@ -1,6 +1,6 @@
 //! Contains the event handler for the bot.
 
-use crate::config::CONFIG as Config;
+use crate::config::CONFIG;
 use poise::serenity_prelude as serenity;
 use serenity::Context;
 use serenity::builder::{CreateEmbed, CreateMessage};
@@ -13,11 +13,12 @@ impl serenity::EventHandler for EventHandler {
         println!("{} is connected!", ready.user.display_name());
 
         let embed = CreateEmbed::new()
-            .description("## Bot is online!")
+            .title("Bot Online!")
+            .description("Syncing application commands...")
             .color(0x00FF00);
 
-        Config
-            .ready_channel
+        CONFIG
+            .ready_event_channel
             .send_message(&ctx.http, CreateMessage::new().embed(embed))
             .await
             .unwrap();

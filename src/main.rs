@@ -4,7 +4,7 @@
 #![deny(missing_docs)]
 
 mod config;
-use config::CONFIG as Config;
+use config::CONFIG;
 
 mod shared_types;
 use shared_types::{Data, Error};
@@ -23,7 +23,9 @@ async fn main() {
         })
         .setup(|ctx, _ready, framework| {
             Box::pin(async move {
-                let old_guild_commands = Config
+                let sync_start = std::time::Instant::now();
+
+                let old_guild_commands = CONFIG
                     .guild_id
                     .get_commands_with_localizations(&ctx.http)
                     .await?;
@@ -33,13 +35,14 @@ async fn main() {
                         "Deleting old guild command: {} ({})",
                         command.name, command.id
                     );
-                    Config
+                    CONFIG
                         .guild_id
                         .delete_command(&ctx.http, command.id)
                         .await?;
                 }
 
-                let old_global_commands = serenity::Command::get_global_commands(&ctx.http).await?;
+                let old_global_commands = serenity::Command::get_global_commands(&ctx.http)
+                    .await?;
 
                 for command in old_global_commands {
                     println!(
@@ -50,12 +53,6 @@ async fn main() {
                 }
 
                 println!("Registering commands...");
-                poise::builtins::register_in_guild(
-                    ctx,
-                    &framework.options().commands,
-                    Config.guild_id,
-                )
-                .await?;
 
                 for command in &framework.options().commands {
                     println!(
@@ -65,14 +62,40 @@ async fn main() {
                     );
                 }
 
+                poise::builtins::register_in_guild(
+                    ctx,
+                    &framework.options().commands,
+                    CONFIG.guild_id,
+                )
+                .await?;
+
+                let sync_duration = sync_start.elapsed();
+
                 println!("\nCommands registered.");
+                println!("Commands Synced in {:.2?}s!", sync_duration.as_secs_f64());
+
+                let commands_synced_embed = serenity::builder::CreateEmbed::new()
+                    .title("Commands Synced!")
+                    .description(format!(
+                        " Took {:.2?}s to sync commands.",
+                        sync_duration.as_secs_f64()
+                    ))
+                    .color(0x00FF88);
+                let commands_synced_message =
+                    serenity::builder::CreateMessage::new().embed(commands_synced_embed);
+
+                CONFIG
+                    .commands_synced_channel
+                    .send_message(&ctx.http, commands_synced_message)
+                    .await
+                    .unwrap();
 
                 Ok(Data {})
             })
         })
         .build();
 
-    let client = serenity::ClientBuilder::new(&Config.token, Config.intents)
+    let client = serenity::ClientBuilder::new(&CONFIG.token, CONFIG.intents)
         .framework(framework)
         .event_handler(events::EventHandler)
         .await;
