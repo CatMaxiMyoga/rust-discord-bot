@@ -1,6 +1,6 @@
 use poise::serenity_prelude::{self as serenity, CreateEmbed};
 
-use crate::shared_types::{Data, Error};
+use crate::shared_types::{Context, Error};
 
 /// Get the avatar of a user or yourself.
 ///
@@ -10,7 +10,7 @@ use crate::shared_types::{Data, Error};
 /// and a direct link to the avatar will be given.
 #[poise::command(slash_command, guild_only)]
 pub async fn avatar(
-    ctx: poise::Context<'_, Data, Error>,
+    ctx: Context<'_>,
     #[description = "The user to get the avatar of"] user: Option<serenity::Member>,
 ) -> Result<(), Error> {
     let user = match user {

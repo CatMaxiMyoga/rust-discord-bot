@@ -1,8 +1,8 @@
-use poise::serenity_prelude::{CreateAttachment, GetMessages, builder::CreateMessage};
 use chrono_tz::Europe::Berlin;
+use poise::serenity_prelude::{CreateAttachment, GetMessages, builder::CreateMessage};
 
-use crate::config::CONFIG;
-use crate::shared_types::{Data, Error};
+use crate::CONFIG;
+use crate::shared_types::{Context, Error};
 
 /// Deletes the specified amount of messages in the current channel.
 ///
@@ -15,7 +15,7 @@ use crate::shared_types::{Data, Error};
 /// Note: Messages older than 14 days cannot be bulk deleted due to Discord limitations.
 #[poise::command(slash_command, guild_only)]
 pub async fn purge(
-    ctx: poise::Context<'_, Data, Error>,
+    ctx: Context<'_>,
     #[description = "The amount of messages to delete"]
     #[min = 1]
     #[max = 100]
@@ -42,9 +42,7 @@ pub async fn purge(
 
     for message in messages.iter().rev() {
         let timestamp = message.timestamp.to_utc().with_timezone(&Berlin);
-        let timestamp: String = timestamp
-            .format("%d/%m/%Y %I:%M:%S %p %Z")
-            .to_string();
+        let timestamp: String = timestamp.format("%d/%m/%Y %I:%M:%S %p %Z").to_string();
         let author = &message.author.name;
         let content = &message.content;
         let attachment_count = message.attachments.len();

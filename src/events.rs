@@ -1,6 +1,6 @@
 //! Contains the event handler for the bot.
 
-use crate::config::CONFIG;
+use crate::CONFIG;
 use poise::serenity_prelude as serenity;
 use serenity::Context;
 use serenity::builder::{CreateEmbed, CreateMessage};

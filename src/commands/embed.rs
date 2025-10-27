@@ -19,6 +19,7 @@ type EmbedField = (String, String, bool);
 /// `description`, the values for `fields` and the `message`.
 /// To include a literal backslash character, use `\\`
 #[poise::command(slash_command, guild_only)]
+#[allow(clippy::too_many_arguments)]
 pub async fn embed(
     ctx: Context<'_>,
 
@@ -270,7 +271,7 @@ pub async fn embed(
     }
 
     ctx.send(reply).await?;
-    return Ok(());
+    Ok(())
 }
 
 fn check_url(input: &str) -> bool {
