@@ -1,4 +1,4 @@
-use crate::shared_types::{Context, Error};
+use crate::shared_types::{CommandsExport, Context, Error};
 
 /// Shows help information for commands.
 ///
@@ -38,3 +38,5 @@ async fn autocomplete_command(ctx: Context<'_>, partial: &str) -> Vec<String> {
         })
         .collect()
 }
+
+pub static EXPORT: CommandsExport = &[help];

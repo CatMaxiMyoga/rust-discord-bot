@@ -1,6 +1,6 @@
 use poise::serenity_prelude::{self as serenity, CreateEmbed};
 
-use crate::shared_types::{Context, Error};
+use crate::shared_types::{CommandsExport, Context, Error};
 
 /// Get the avatar of a user or yourself.
 ///
@@ -41,3 +41,5 @@ pub async fn avatar(
 
     Ok(())
 }
+
+pub static EXPORT: CommandsExport = &[avatar];

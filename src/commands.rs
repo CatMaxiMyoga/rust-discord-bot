@@ -2,21 +2,28 @@
 
 use crate::shared_types::{Data, Error};
 
-mod avatar;
-mod embed;
-mod help;
-mod ping;
-mod purge;
-mod say;
+macro_rules! all_commands {
+    [$($name:ident),* $(,)?] => {
+        $(mod $name;)*
 
-/// Returns a vector of all commands in the bot.
-pub fn all() -> Vec<poise::Command<Data, Error>> {
-    vec![
-        avatar::avatar(),
-        embed::embed(),
-        help::help(),
-        ping::ping(),
-        purge::purge(),
-        say::say(),
-    ]
+        /// Returns a vector of all commands.
+        pub fn all() -> Vec<poise::Command<Data, Error>> {
+            let mut v = Vec::new();
+            $(
+                for f in $name::EXPORT {
+                    v.push(f());
+                }
+            )*
+            v
+        }
+    };
 }
+
+all_commands![
+    avatar,
+    embed,
+    help,
+    ping,
+    purge,
+    say
+];

@@ -1,4 +1,4 @@
-use crate::shared_types::{Context, Error};
+use crate::shared_types::{CommandsExport, Context, Error};
 use poise::{
     CreateReply,
     serenity_prelude::{self as serenity, CreateEmbedAuthor},
@@ -316,3 +316,5 @@ fn parse_fields(input: String) -> Vec<EmbedField> {
         })
         .collect()
 }
+
+pub static EXPORT: CommandsExport = &[embed];

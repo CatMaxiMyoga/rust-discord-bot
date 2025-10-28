@@ -2,7 +2,7 @@ use chrono_tz::Europe::Berlin;
 use poise::serenity_prelude::{CreateAttachment, GetMessages, builder::CreateMessage};
 
 use crate::CONFIG;
-use crate::shared_types::{Context, Error};
+use crate::shared_types::{CommandsExport, Context, Error};
 
 /// Deletes the specified amount of messages in the current channel.
 ///
@@ -98,3 +98,5 @@ pub async fn purge(
 
     Ok(())
 }
+
+pub static EXPORT: CommandsExport = &[purge];

@@ -1,4 +1,4 @@
-use crate::shared_types::{Context, Error};
+use crate::shared_types::{CommandsExport, Context, Error};
 
 /// Make the bot send a message.
 ///
@@ -21,3 +21,5 @@ pub async fn say(
     ctx.say(unescaped_message).await?;
     Ok(())
 }
+
+pub static EXPORT: CommandsExport = &[say];

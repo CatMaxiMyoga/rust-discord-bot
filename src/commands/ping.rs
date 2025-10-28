@@ -1,4 +1,4 @@
-use crate::shared_types::{Context, Error};
+use crate::shared_types::{CommandsExport, Context, Error};
 
 /// Sends back "Pong! 🏓"
 ///
@@ -8,3 +8,5 @@ pub async fn ping(ctx: Context<'_>) -> Result<(), Error> {
     ctx.say("Pong! 🏓").await?;
     Ok(())
 }
+
+pub static EXPORT: CommandsExport = &[ping];
