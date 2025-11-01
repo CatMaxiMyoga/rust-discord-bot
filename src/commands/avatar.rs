@@ -1,6 +1,6 @@
 use poise::serenity_prelude::{self as serenity, CreateEmbed};
 
-use crate::shared_types::{CommandsExport, Context, Error};
+use crate::utils::shared_types::{CommandsExport, Context, Error};
 
 /// Get the avatar of a user or yourself.
 ///

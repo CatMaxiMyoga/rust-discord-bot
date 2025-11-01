@@ -1,4 +1,4 @@
-use crate::shared_types::{CommandsExport, Context, Error};
+use crate::utils::shared_types::{CommandsExport, Context, Error};
 
 /// Make the bot send a message.
 ///

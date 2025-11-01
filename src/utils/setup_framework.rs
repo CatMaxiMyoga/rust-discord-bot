@@ -1,4 +1,4 @@
-use crate::shared_types::{Data, Error};
+use crate::utils::shared_types::{Data, Error};
 use crate::{CONFIG, commands};
 use poise::Framework;
 use poise::serenity_prelude::{self as serenity, Context, Ready};

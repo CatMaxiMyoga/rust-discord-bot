@@ -1,4 +1,4 @@
-use crate::shared_types::{CommandsExport, Context, Error};
+use crate::utils::shared_types::{CommandsExport, Context, Error};
 use poise::{
     CreateReply,
     serenity_prelude::{self as serenity, CreateEmbedAuthor},
