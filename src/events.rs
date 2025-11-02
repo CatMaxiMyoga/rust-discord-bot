@@ -10,8 +10,6 @@ pub struct EventHandler;
 #[serenity::async_trait]
 impl serenity::EventHandler for EventHandler {
     async fn ready(&self, ctx: Context, ready: serenity::Ready) {
-        println!("{} is connected!", ready.user.display_name());
-
         let embed = CreateEmbed::new()
             .title("Bot Online!")
             .description("Syncing application commands...")
@@ -22,5 +20,7 @@ impl serenity::EventHandler for EventHandler {
             .send_message(&ctx.http, CreateMessage::new().embed(embed))
             .await
             .unwrap();
+
+        CONFIG.logger.info(&format!("{} is connected!", ready.user.display_name()));
     }
 }

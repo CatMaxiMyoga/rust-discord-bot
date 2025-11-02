@@ -1,11 +1,13 @@
 //! Contains the Settings
 
+use crate::utils::logging::Logger;
 use dotenv::dotenv;
 use once_cell::sync::Lazy;
 use poise::serenity_prelude::{ChannelId, GatewayIntents, GuildId};
 
 #[derive(Debug)]
 pub struct Config {
+    pub logger: Logger,
     pub token: String,
     pub guild_id: GuildId,
     pub intents: GatewayIntents,
@@ -26,7 +28,14 @@ impl Config {
 
         let bot_status_channel = ChannelId::new(1239935861370650634);
 
+        let now = chrono::Utc::now().with_timezone(&chrono_tz::Europe::Berlin);
+        let datetime = now.format("%Y-%m-%d_%H-%M-%S_%Z").to_string();
+        let logger = Logger::builder(String::from("main"))
+            .output_file(format!("logs/{}.log", datetime))
+            .build();
+
         Self {
+            logger,
             token: std::env::var("DISCORD_TOKEN").expect("Missing token in .env file"),
             guild_id: GuildId::new(1018921751691923536),
             intents: GatewayIntents::all(),

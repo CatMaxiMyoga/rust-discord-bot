@@ -17,10 +17,6 @@ fn setup<'a>(
             .await?;
 
         for command in old_guild_commands {
-            println!(
-                "Deleting old guild command: {} ({})",
-                command.name, command.id
-            );
             CONFIG
                 .guild_id
                 .delete_command(&ctx.http, command.id)
@@ -30,21 +26,15 @@ fn setup<'a>(
         let old_global_commands = serenity::Command::get_global_commands(&ctx.http).await?;
 
         for command in old_global_commands {
-            println!(
-                "Deleting old global command: {} ({})",
-                command.name, command.id
-            );
             serenity::Command::delete_global_command(&ctx.http, command.id).await?;
         }
 
-        println!("Registering commands...");
-
         for command in &framework.options().commands {
-            println!(
+            CONFIG.logger.debug(&format!(
                 "/{}\t  {}",
                 command.name,
                 command.description.as_deref().unwrap_or("")
-            );
+            ));
         }
 
         poise::builtins::register_in_guild(
@@ -56,8 +46,10 @@ fn setup<'a>(
 
         let sync_duration = sync_start.elapsed();
 
-        println!("\nCommands registered.");
-        println!("Commands Synced in {:.2?}s!", sync_duration.as_secs_f64());
+        CONFIG.logger.info(&format!(
+            "Commands Synced in {:.2?}s!",
+            sync_duration.as_secs_f64()
+        ));
 
         let commands_synced_embed = serenity::builder::CreateEmbed::new()
             .title("Commands Synced!")
