@@ -1,6 +1,9 @@
 //! A simple logging utility module.
 
+#![allow(dead_code)]
+
 use std::collections::HashMap;
+
 
 /// Defines a 24-bit color with 8-bit rgb components.
 #[derive(Debug, Clone, Eq, PartialEq)]
@@ -108,20 +111,20 @@ impl Logger {
         LoggerBuilder::new(name)
     }
 
-    pub fn debug(&self, message: &str) {
+    pub fn debug(&self, _message: &str) {
         todo!()
     }
-    pub fn info(&self, message: &str) {
+    pub fn info(&self, _message: &str) {
         todo!()
     }
-    pub fn warn(&self, message: &str) {
+    pub fn warn(&self, _message: &str) {
         todo!()
     }
-    pub fn error(&self, message: &str) {
+    pub fn error(&self, _message: &str) {
         todo!()
     }
 
-    fn log(&self, level: LogLevel, message: &str) {
+    fn log(&self, _level: LogLevel, _message: &str) {
         todo!()
     }
 }
