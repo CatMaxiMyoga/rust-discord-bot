@@ -3,3 +3,4 @@
 pub mod shared_types;
 pub mod setup_client;
 pub mod setup_framework;
+pub mod logging;
