@@ -31,7 +31,7 @@ impl Config {
 
         let now = chrono::Utc::now().with_timezone(&chrono_tz::Europe::Berlin);
         let datetime = now.format("%Y-%m-%d_%H-%M-%S_%Z").to_string();
-        let logger = Logger::builder(String::from("main"))
+        let logger = Logger::builder()
             .output_file(format!("logs/{}.log", datetime))
             .build();
 

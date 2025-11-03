@@ -1,7 +1,5 @@
 //! A simple logging utility module.
 
-#![allow(dead_code)]
-
 use lazy_static::lazy_static;
 use regex::Regex;
 use std::collections::HashMap;
@@ -123,7 +121,6 @@ pub enum LogLevel {
 
 #[derive(Debug, Clone)]
 pub struct Logger {
-    name: String,
     log_level: LogLevel,
     output_file: Option<String>,
     format: LoggingFormat,
@@ -131,21 +128,19 @@ pub struct Logger {
 
 impl Logger {
     fn new(
-        name: String,
         log_level: Option<LogLevel>,
         output_file: Option<String>,
         format: Option<LoggingFormat>,
     ) -> Self {
         Self {
-            name,
             log_level: log_level.unwrap_or_default(),
             output_file,
             format: format.unwrap_or_default(),
         }
     }
 
-    pub fn builder(name: String) -> LoggerBuilder {
-        LoggerBuilder::new(name)
+    pub fn builder() -> LoggerBuilder {
+        LoggerBuilder::new()
     }
 
     pub fn debug(&self, message: &str) {
@@ -355,25 +350,20 @@ impl Logger {
 
 impl Default for Logger {
     fn default() -> Self {
-        Self::new(String::from("default"), None, None, None)
+        Self::new(None, None, None)
     }
 }
 
+#[derive(Debug, Clone, Default)]
 pub struct LoggerBuilder {
-    name: String,
     log_level: Option<LogLevel>,
     output_file: Option<String>,
     format: Option<LoggingFormat>,
 }
 
 impl LoggerBuilder {
-    pub fn new(name: String) -> Self {
-        Self {
-            name,
-            log_level: Default::default(),
-            output_file: None,
-            format: Default::default(),
-        }
+    pub fn new() -> Self {
+        Default::default()
     }
 
     pub fn log_level(mut self, level: LogLevel) -> Self {
@@ -392,6 +382,6 @@ impl LoggerBuilder {
     }
 
     pub fn build(self) -> Logger {
-        Logger::new(self.name, self.log_level, self.output_file, self.format)
+        Logger::new(self.log_level, self.output_file, self.format)
     }
 }
