@@ -21,6 +21,8 @@ impl serenity::EventHandler for EventHandler {
             .await
             .unwrap();
 
-        CONFIG.logger.info(&format!("{} is connected!", ready.user.display_name()));
+        CONFIG
+            .logger
+            .info(&format!("{} is connected!", ready.user.display_name()));
     }
 }

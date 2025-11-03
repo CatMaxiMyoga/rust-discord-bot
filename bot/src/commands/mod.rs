@@ -1,6 +1,6 @@
 //! Contains all the bot commands.
 
-use crate::utils::shared_types::{Data, Error};
+use utils::shared_types::{Data, Error};
 
 macro_rules! all_commands {
     [$($name:ident),* $(,)?] => {
@@ -19,11 +19,4 @@ macro_rules! all_commands {
     };
 }
 
-all_commands![
-    avatar,
-    embed,
-    help,
-    ping,
-    purge,
-    say
-];
+all_commands![avatar, embed, help, ping, purge, say];

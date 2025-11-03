@@ -1,9 +1,9 @@
 //! Contains the Settings
 
-use crate::utils::logging::Logger;
 use dotenv::dotenv;
 use once_cell::sync::Lazy;
 use poise::serenity_prelude::{ChannelId, GatewayIntents, GuildId};
+use utils::logging::Logger;
 
 #[derive(Debug)]
 pub struct Config {
