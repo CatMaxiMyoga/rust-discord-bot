@@ -6,8 +6,8 @@ pub mod shared_types;
 use crate::shared_types::{Data, Error};
 use poise::Framework;
 use poise::serenity_prelude::{
-    ChannelId, Client, ClientBuilder, Command, Context, CreateEmbed, CreateMessage, EventHandler,
-    GatewayIntents, GuildId, Ready,
+    ActivityData, ChannelId, Client, ClientBuilder, Command, Context, CreateEmbed, CreateMessage,
+    EventHandler, GatewayIntents, GuildId, OnlineStatus, Ready,
 };
 
 pub async fn get_client(
@@ -30,6 +30,11 @@ fn setup<'a>(
     commands_synced_channel: ChannelId,
 ) -> poise::BoxFuture<'a, Result<Data, Error>> {
     Box::pin(async move {
+        ctx.set_presence(
+            Some(ActivityData::playing("playing with yarn balls")),
+            OnlineStatus::Idle,
+        );
+
         let sync_start = std::time::Instant::now();
 
         let old_guild_commands = guild_id.get_commands_with_localizations(&ctx.http).await?;
