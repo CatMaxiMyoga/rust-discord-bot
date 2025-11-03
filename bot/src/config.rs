@@ -20,6 +20,7 @@ pub struct Config {
 
     // Misc Log Channels
     pub commands_synced_channel: ChannelId,
+    pub shutdown_channel: ChannelId,
 }
 
 impl Config {
@@ -48,6 +49,7 @@ impl Config {
 
             // Misc Log Channels
             commands_synced_channel: bot_status_channel,
+            shutdown_channel: bot_status_channel,
         }
     }
 }

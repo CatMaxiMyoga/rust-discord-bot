@@ -19,4 +19,4 @@ macro_rules! all_commands {
     };
 }
 
-all_commands![avatar, embed, help, ping, purge, say];
+all_commands![avatar, embed, help, ping, purge, say, shutdown];
