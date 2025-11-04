@@ -1,8 +1,15 @@
 use chrono_tz::Europe::Berlin;
-use poise::serenity_prelude::{CreateAttachment, GetMessages, builder::CreateMessage};
+use poise::serenity_prelude::{
+    CreateAttachment, CreateEmbedAuthor, GetMessages, Timestamp,
+    builder::{CreateEmbed, CreateMessage},
+};
 
 use crate::CONFIG;
 use utils::shared_types::{CommandsExport, Context, Error};
+
+async fn check(ctx: Context<'_>) -> Result<bool, Error> {
+    Ok(utils::check_role(CONFIG.purge_roles.clone(), &ctx, &CONFIG.logger).await)
+}
 
 /// Deletes the specified amount of messages in the current channel.
 ///
@@ -13,7 +20,7 @@ use utils::shared_types::{CommandsExport, Context, Error};
 /// messages in the channel and use that amount for the reply and log instead of the specified \
 /// amount.
 /// Note: Messages older than 14 days cannot be bulk deleted due to Discord limitations.
-#[poise::command(slash_command, guild_only)]
+#[poise::command(slash_command, guild_only, check = check)]
 pub async fn purge(
     ctx: Context<'_>,
     #[description = "The amount of messages to delete"]
@@ -82,19 +89,40 @@ pub async fn purge(
     );
 
     let channel_mention = format!("<#{}>", channel_id);
-    let log_message = format!(
+    let log_description = format!(
         "Purged {} messages in channel {}",
         message_count, channel_mention
     );
+    let log_author_icon = ctx
+        .author()
+        .avatar_url()
+        .unwrap_or(ctx.author().default_avatar_url());
+
+    let log_embed = CreateEmbed::default()
+        .author(CreateEmbedAuthor::new(&ctx.author().name).icon_url(log_author_icon))
+        .title("Purge Command Executed")
+        .description(log_description)
+        .color(0xFF0000)
+        .timestamp(Timestamp::now());
 
     let log = CreateMessage::default()
-        .content(log_message)
+        .embed(log_embed)
         .add_file(attachment);
 
     CONFIG
         .purge_command_channel
         .send_message(&ctx.serenity_context().http, log)
         .await?;
+
+    let channel_name = channel_id.name(&ctx.http()).await.unwrap_or_default();
+
+    CONFIG.logger.info(&format!(
+        "{} purged {} messages in channel '{}' ({})",
+        ctx.author().name,
+        message_count,
+        channel_name,
+        channel_id
+    ));
 
     Ok(())
 }

@@ -18,13 +18,23 @@ async fn main() {
     )
     .await;
 
-    let mut client = utils::get_client(
+    let client = utils::get_client(
         framework,
         events::EventHandler,
         &CONFIG.token,
         CONFIG.intents,
     )
     .await;
+
+    let mut client = match client {
+        Err(e) => {
+            CONFIG
+                .logger
+                .error(&format!("Error creating client: {}", e));
+            return;
+        }
+        Ok(c) => c,
+    };
 
     client.start().await.unwrap();
 }

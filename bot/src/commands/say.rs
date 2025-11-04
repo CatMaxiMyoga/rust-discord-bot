@@ -1,4 +1,9 @@
 use utils::shared_types::{CommandsExport, Context, Error};
+use crate::CONFIG;
+
+async fn check(ctx: Context<'_>) -> Result<bool, Error> {
+    Ok(utils::check_role(CONFIG.say_roles.clone(), &ctx, &CONFIG.logger).await)
+}
 
 /// Make the bot send a message.
 ///
@@ -8,7 +13,7 @@ use utils::shared_types::{CommandsExport, Context, Error};
 /// send an embed use the `embed` command instead.
 /// Makes sure to handle escaped characters like `\n` properly. To include a literal backslash \
 /// character, use `\\`
-#[poise::command(slash_command, guild_only)]
+#[poise::command(slash_command, guild_only, check = check)]
 pub async fn say(
     ctx: Context<'_>,
     #[description = "The message to send. Supports escaped characters like \\n."]

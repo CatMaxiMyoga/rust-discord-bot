@@ -19,7 +19,12 @@ impl serenity::EventHandler for EventHandler {
             .ready_event_channel
             .send_message(&ctx.http, CreateMessage::new().embed(embed))
             .await
-            .unwrap();
+            .map_err(|e| {
+                CONFIG
+                    .logger
+                    .error(&format!("Failed to send ready message: {}", e));
+            })
+            .ok();
 
         CONFIG
             .logger

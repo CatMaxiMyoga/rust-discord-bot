@@ -5,8 +5,13 @@ use poise::{
 use regex::Regex;
 use serenity::builder::CreateEmbed;
 use utils::shared_types::{CommandsExport, Context, Error};
+use crate::CONFIG;
 
 type EmbedField = (String, String, bool);
+
+async fn check(ctx: Context<'_>) -> Result<bool, Error> {
+    Ok(utils::check_role(CONFIG.embed_roles.clone(), &ctx, &CONFIG.logger).await)
+}
 
 /// Send a message with an embed.
 ///
@@ -18,7 +23,7 @@ type EmbedField = (String, String, bool);
 /// Some parameters make sure to handle escaped characters like `\n` properly. These are:
 /// `description`, the values for `fields` and the `message`.
 /// To include a literal backslash character, use `\\`
-#[poise::command(slash_command, guild_only)]
+#[poise::command(slash_command, guild_only, check = check)]
 #[allow(clippy::too_many_arguments)]
 pub async fn embed(
     ctx: Context<'_>,
@@ -275,11 +280,13 @@ pub async fn embed(
 }
 
 fn check_url(input: &str) -> bool {
+    // Safe to unwrap since the regex is valid
     let url_regex = Regex::new(r"^(https?://[^\s]+)$").unwrap();
     url_regex.is_match(input)
 }
 
 fn check_image_url(input: &str) -> bool {
+    // Safe to unwrap since the regex is valid
     let image_url_regex =
         Regex::new(r"^(https?://[^\s]+\.(png|jpg|jpeg|gif|webp|bmp))$|^avatar$").unwrap();
     image_url_regex.is_match(input)

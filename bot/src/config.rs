@@ -2,7 +2,7 @@
 
 use dotenv::dotenv;
 use once_cell::sync::Lazy;
-use poise::serenity_prelude::{ChannelId, GatewayIntents, GuildId};
+use poise::serenity_prelude::{ChannelId, GatewayIntents, GuildId, RoleId};
 use utils::logging::Logger;
 
 #[derive(Debug)]
@@ -21,6 +21,12 @@ pub struct Config {
     // Misc Log Channels
     pub commands_synced_channel: ChannelId,
     pub shutdown_channel: ChannelId,
+
+    // Command roles
+    pub avatar_roles: Vec<RoleId>,
+    pub embed_roles: Vec<RoleId>,
+    pub purge_roles: Vec<RoleId>,
+    pub say_roles: Vec<RoleId>,
 }
 
 impl Config {
@@ -50,6 +56,12 @@ impl Config {
             // Misc Log Channels
             commands_synced_channel: bot_status_channel,
             shutdown_channel: bot_status_channel,
+
+            // Command roles
+            avatar_roles: vec![RoleId::new(1233889604436754525)],
+            embed_roles: vec![RoleId::new(1237741325462405223)],
+            purge_roles: vec![RoleId::new(1234229041343762513)],
+            say_roles: vec![RoleId::new(1053019464075063327)],
         }
     }
 }

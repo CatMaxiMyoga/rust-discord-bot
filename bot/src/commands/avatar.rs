@@ -1,5 +1,10 @@
 use poise::serenity_prelude::{self as serenity, CreateEmbed};
 use utils::shared_types::{CommandsExport, Context, Error};
+use crate::CONFIG;
+
+async fn check(ctx: Context<'_>) -> Result<bool, Error> {
+    Ok(utils::check_role(CONFIG.avatar_roles.clone(), &ctx, &CONFIG.logger).await)
+}
 
 /// Get the avatar of a user or yourself.
 ///
@@ -7,7 +12,7 @@ use utils::shared_types::{CommandsExport, Context, Error};
 ///
 /// If no user is specified, your own avatar will be used. The avatar will be displayed directly \
 /// and a direct link to the avatar will be given.
-#[poise::command(slash_command, guild_only)]
+#[poise::command(slash_command, guild_only, check = check)]
 pub async fn avatar(
     ctx: Context<'_>,
     #[description = "The user to get the avatar of"] user: Option<serenity::Member>,
@@ -18,7 +23,6 @@ pub async fn avatar(
     };
 
     let avatar_url = user.avatar_url();
-
     if avatar_url.is_none() {
         let reply = poise::CreateReply::default()
             .content("The specified user does not seem to have an avatar.")
@@ -27,11 +31,13 @@ pub async fn avatar(
         ctx.send(reply).await?;
         return Ok(());
     }
+    // Safe to unwrap since we checked for None above
+    let avatar_url = avatar_url.unwrap();
 
     let embed = CreateEmbed::default()
         .title(format!("{}'s Avatar", user.name))
-        .description(format!("[Direct Link](<{}>)", avatar_url.as_ref().unwrap()))
-        .image(avatar_url.unwrap())
+        .description(format!("[Direct Link](<{}>)", avatar_url))
+        .image(avatar_url)
         .color(0x00FF00)
         .timestamp(serenity::Timestamp::now());
 

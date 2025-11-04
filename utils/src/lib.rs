@@ -3,11 +3,14 @@
 pub mod logging;
 pub mod shared_types;
 
+mod role_check;
+pub use role_check::check_role;
+
 use crate::shared_types::{Data, Error};
 use poise::Framework;
 use poise::serenity_prelude::{
     ActivityData, ChannelId, Client, ClientBuilder, Command, Context, CreateEmbed, CreateMessage,
-    EventHandler, GatewayIntents, GuildId, OnlineStatus, Ready,
+    Error as SerenityError, EventHandler, GatewayIntents, GuildId, OnlineStatus, Ready,
 };
 
 pub async fn get_client(
@@ -15,12 +18,11 @@ pub async fn get_client(
     event_handler: impl EventHandler + 'static,
     token: impl AsRef<str>,
     intents: GatewayIntents,
-) -> Client {
+) -> Result<Client, SerenityError> {
     ClientBuilder::new(&token, intents)
         .framework(framework)
         .event_handler(event_handler)
         .await
-        .unwrap()
 }
 
 fn setup<'a>(
@@ -66,7 +68,7 @@ fn setup<'a>(
         commands_synced_channel
             .send_message(&ctx.http, commands_synced_message)
             .await
-            .unwrap();
+            .ok();
 
         Ok(Data {})
     })
