@@ -22,9 +22,9 @@ pub async fn check(
     // Safe to unwrap since we checked for None above
     let guild_id = guild_id.unwrap();
 
-    // Check role restrictions
     if command_rules.roles.is_some() {
-        if !check_role(command_rules.roles.unwrap(), &ctx, guild_id).await {
+        // Safe to unwrap since we checked for Some
+        if !check_roles(command_rules.roles.unwrap(), &ctx, guild_id).await {
             return false;
         }
     }
@@ -32,7 +32,7 @@ pub async fn check(
     true
 }
 
-async fn check_role(roles: Vec<RoleId>, ctx: &Context<'_>, guild_id: GuildId) -> bool {
+async fn check_roles(roles: Vec<RoleId>, ctx: &Context<'_>, guild_id: GuildId) -> bool {
     let mut has_role = false;
     for role in &roles {
         let result = ctx.author()
