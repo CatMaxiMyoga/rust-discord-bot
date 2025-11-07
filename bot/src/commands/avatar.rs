@@ -3,7 +3,7 @@ use poise::serenity_prelude::{self as serenity, CreateEmbed};
 use utils::shared_types::{CommandsExport, Context, Error};
 
 async fn check(ctx: Context<'_>) -> Result<bool, Error> {
-    Ok(utils::checks::check_role(CONFIG.avatar_roles.clone(), &ctx, &CONFIG.logger).await)
+    Ok(utils::check(CONFIG.commands.avatar, &ctx, &CONFIG.logger).await)
 }
 
 /// Get the avatar of a user or yourself.
