@@ -1,6 +1,7 @@
 use crate::shared_types::Context;
 use poise::{CreateReply, serenity_prelude::RoleId};
 
+/// Checks if the command invoker has at least one of the required roles.
 pub async fn check_role(
     required_roles: Vec<RoleId>,
     ctx: &Context<'_>,

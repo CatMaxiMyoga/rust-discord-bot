@@ -1,4 +1,5 @@
 //! Contains helper functions and utilities.
+#![deny(missing_docs)]
 
 pub mod logging;
 pub mod shared_types;
@@ -13,6 +14,8 @@ use poise::serenity_prelude::{
     Error as SerenityError, EventHandler, GatewayIntents, GuildId, OnlineStatus, Ready,
 };
 
+/// Creates and returns a Serenity Client with the given framework, event handler, token, and
+/// intents.
 pub async fn get_client(
     framework: poise::Framework<Data, Error>,
     event_handler: impl EventHandler + 'static,
@@ -87,6 +90,7 @@ fn setup_wrapper(
     }
 }
 
+/// Creates and returns a Poise Framework with the given commands, guild ID, and commands synced
 pub async fn get_framework(
     commands: Vec<poise::Command<Data, Error>>,
     guild_id: GuildId,

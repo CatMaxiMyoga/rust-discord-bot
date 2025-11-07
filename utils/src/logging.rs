@@ -21,6 +21,7 @@ pub struct Color {
 }
 
 impl Color {
+    /// Create a Color from 8-bit rgb components.
     pub fn rgb(r: u8, g: u8, b: u8) -> Self {
         Self {
             red: r,
@@ -49,6 +50,7 @@ impl Color {
         }
     }
 
+    /// Generate and return the ANSI escape code for this color.
     pub fn ansi_code(&self) -> String {
         format!("\x1b[38;2;{};{};{}m", self.red, self.green, self.blue)
     }
@@ -81,12 +83,19 @@ impl Default for Color {
 /// - You cannot nest color formatting.
 #[derive(Debug, Clone, Eq, PartialEq)]
 pub struct LoggingFormat {
+    /// Template string for log messages. For details, see the [`LoggingFormat`] documentation.
     pub template: String,
+    /// Color for the timestamp when using `{{timestampc}}`.
     pub timestamp_color: Color,
+    /// Format for the timestamp. Uses `chrono` formatting.
     pub timestamp_format: String,
+    /// Timezone for the timestamp.
     pub timezone: chrono_tz::Tz,
-    /// Missing colors will fall back to default.
+    /// Colors for different log levels when using `{{levelc}}`. Missing levels default to
+    /// [`Default::default()`].
     pub level_colors: HashMap<LogLevel, Color>,
+    /// Colors for different log levels when using `{{messagec}}`. Missing levels default to
+    /// [`Default::default()`].
     pub message_colors: HashMap<LogLevel, Color>,
 }
 
@@ -112,14 +121,20 @@ impl Default for LoggingFormat {
 /// Enum for different logging levels.
 #[derive(Debug, Clone, Default, Eq, PartialEq, Hash, Ord, PartialOrd)]
 pub enum LogLevel {
+    /// Shows debug log messages
     Debug,
     #[default]
+    /// Shows info log messages
     Info,
+    /// Shows warning log messages
     Warn,
+    /// Shows error log messages
     Error,
+    /// Turns off logging
     Off,
 }
 
+/// A simple logger with configurable log levels, output file, and formatting.
 #[derive(Debug, Clone)]
 pub struct Logger {
     log_level: LogLevel,
@@ -140,35 +155,45 @@ impl Logger {
         }
     }
 
+    /// Create a new builder for constructing a Logger.
     pub fn builder() -> LoggerBuilder {
         LoggerBuilder::new()
     }
 
+    /// Log a debug message. Only logs if the log level is set to Debug.
     pub fn debug(&self, message: &str) {
         if self.log_level <= LogLevel::Debug {
             self.log(LogLevel::Debug, message);
         }
     }
+
+    /// Log an info message. Only logs if the log level is set to Info or lower.
     pub fn info(&self, message: &str) {
         if self.log_level <= LogLevel::Info {
             self.log(LogLevel::Info, message);
         }
     }
+
+    /// Log a warning message. Only logs if the log level is set to Warn or lower.
     pub fn warn(&self, message: &str) {
         if self.log_level <= LogLevel::Warn {
             self.log(LogLevel::Warn, message);
         }
     }
+
+    /// Log an error message. Only logs if the log level is set to Error or lower.
     pub fn error(&self, message: &str) {
         if self.log_level <= LogLevel::Error {
             self.log(LogLevel::Error, message);
         }
     }
 
+    /// Set the log level for the logger.
     pub fn set_log_level(&mut self, level: LogLevel) {
         self.log_level = level;
     }
 
+    /// Set the output file for the logger. Use `None` to disable file logging.
     pub fn set_output_file(&mut self, file: Option<String>) {
         self.output_file = file;
     }
@@ -356,6 +381,7 @@ impl Default for Logger {
     }
 }
 
+/// Builder for constructing a Logger with custom settings.
 #[derive(Debug, Clone, Default)]
 pub struct LoggerBuilder {
     log_level: Option<LogLevel>,
@@ -364,25 +390,30 @@ pub struct LoggerBuilder {
 }
 
 impl LoggerBuilder {
+    /// Create a new LoggerBuilder with default settings.
     pub fn new() -> Self {
         Default::default()
     }
 
+    /// Set the log level for the logger.
     pub fn log_level(mut self, level: LogLevel) -> Self {
         self.log_level = Some(level);
         self
     }
 
+    /// Set the output file for the logger.
     pub fn output_file(mut self, file: String) -> Self {
         self.output_file = Some(file);
         self
     }
 
+    /// Set the logging format for the logger.
     pub fn format(mut self, format: LoggingFormat) -> Self {
         self.format = Some(format);
         self
     }
 
+    /// Build and return the Logger with the specified settings.
     pub fn build(self) -> Logger {
         Logger::new(self.log_level, self.output_file, self.format)
     }
