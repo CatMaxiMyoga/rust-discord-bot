@@ -4,43 +4,25 @@ use poise::{
     serenity_prelude::{CacheHttp, GuildId, RoleId},
 };
 
-/// Checks if the command invoker has at least one of the required roles.
-///
-/// # Arguments
-/// - `command_rules` - The rules for the command.
-/// - `ctx` - The command context.
-/// - `logger` - A logger instance for logging errors.
+/// Checks if the user is allowed to invoke the command based on the given rules and context.
 pub async fn check(
     command_rules: crate::config::CommandRules,
     ctx: &Context<'_>,
     logger: &crate::logging::Logger,
 ) -> bool {
-    let guild_id = ctx.guild_id();
-
-    if guild_id.is_none() {
+    let Some(guild_id) = ctx.guild_id() else {
         logger.error("command check called with non-guild context");
         return false;
-    }
+    };
 
-    // Safe to unwrap since we checked for None above
-    let guild_id = guild_id.unwrap();
-
-    if command_rules.roles.is_some() {
-        // Safe to unwrap since we checked for Some
-        if !check_roles(command_rules.roles.unwrap(), &ctx, guild_id).await {
+    if let Some(roles) = command_rules.roles {
+        if !check_roles(roles, &ctx, guild_id).await {
             return false;
         }
     }
 
-    if command_rules.channels.is_some() {
-        // Safe to unwrap since we checked for Some
-        if !check_channels(
-            command_rules.channels.unwrap(),
-            command_rules.channel_whitelist,
-            &ctx,
-        )
-        .await
-        {
+    if let Some(channels) = command_rules.channels {
+        if !check_channels(channels, command_rules.channel_whitelist, &ctx).await {
             return false;
         }
     }
