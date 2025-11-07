@@ -117,6 +117,7 @@ pub enum LogLevel {
     Info,
     Warn,
     Error,
+    Off,
 }
 
 #[derive(Debug, Clone)]
@@ -238,6 +239,7 @@ impl Logger {
                                 LogLevel::Info => "INFO",
                                 LogLevel::Warn => "WARN",
                                 LogLevel::Error => "ERROR",
+                                _ => "",
                             };
                             file_output.push_str(level_str);
                             if placeholder == "levelc" {

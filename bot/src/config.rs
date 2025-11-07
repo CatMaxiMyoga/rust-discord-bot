@@ -7,6 +7,7 @@ use utils::logging::Logger;
 
 #[derive(Debug)]
 pub struct Config {
+    pub log_dir: String,
     pub logger: Logger,
     pub token: String,
     pub guild_id: GuildId,
@@ -35,13 +36,16 @@ impl Config {
 
         let bot_status_channel = ChannelId::new(1239935861370650634);
 
+        let log_dir = String::from("logs");
+
         let now = chrono::Utc::now().with_timezone(&chrono_tz::Europe::Berlin);
         let datetime = now.format("%Y-%m-%d_%H-%M-%S_%Z").to_string();
         let logger = Logger::builder()
-            .output_file(format!("logs/{}.log", datetime))
+            .output_file(format!("{}/{}.log", log_dir, datetime))
             .build();
 
         Self {
+            log_dir,
             logger,
             token: std::env::var("DISCORD_TOKEN").expect("Missing token in .env file"),
             guild_id: GuildId::new(1018921751691923536),
