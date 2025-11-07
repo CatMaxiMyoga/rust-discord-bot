@@ -24,7 +24,7 @@ pub async fn shutdown(ctx: Context<'_>) -> Result<(), Error> {
         .await?;
 
     ctx.serenity_context()
-        .set_presence(None, OnlineStatus::Offline);
+        .set_presence(None, OnlineStatus::Invisible);
     ctx.framework().shard_manager.shutdown_all().await;
 
     Ok(())
