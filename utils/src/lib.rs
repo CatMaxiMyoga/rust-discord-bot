@@ -3,9 +3,10 @@
 
 pub mod logging;
 pub mod shared_types;
+pub mod config;
 
-mod role_check;
-pub use role_check::check_role;
+mod command_check;
+pub use command_check::check;
 
 use crate::shared_types::{Data, Error};
 use poise::Framework;

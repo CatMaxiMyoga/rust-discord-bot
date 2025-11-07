@@ -8,7 +8,7 @@ use crate::CONFIG;
 use utils::shared_types::{CommandsExport, Context, Error};
 
 async fn check(ctx: Context<'_>) -> Result<bool, Error> {
-    Ok(utils::check_role(CONFIG.purge_roles.clone(), &ctx, &CONFIG.logger).await)
+    Ok(utils::check(CONFIG.commands.purge, &ctx, &CONFIG.logger).await)
 }
 
 /// Deletes the specified amount of messages in the current channel.

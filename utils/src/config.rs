@@ -6,12 +6,55 @@ use poise::serenity_prelude::{ChannelId, GatewayIntents, GuildId, RoleId};
 use utils::logging::Logger;
 
 #[derive(Debug)]
+pub struct CommandRules {
+    pub roles: Option<Vec<RoleId>>,
+    pub channels: Option<Vec<ChannelId>>,
+    pub channel_whitelist: bool,
+}
+
+#[derive(Debug)]
+pub struct CommandsConfig {
+    pub avatar: CommandRules,
+    pub embed: CommandRules,
+    pub purge: CommandRules,
+    pub say: CommandRules,
+}
+
+impl Default for CommandsConfig {
+    fn default() -> Self {
+        Self {
+            avatar: CommandRules {
+                roles: Some(vec![RoleId::new(1233889604436754525)]),
+                channels: None,
+                channel_whitelist: false,
+            },
+            embed: CommandRules {
+                roles: Some(vec![RoleId::new(1237741325462405223)]),
+                channels: None,
+                channel_whitelist: false,
+            },
+            purge: CommandRules {
+                roles: Some(vec![RoleId::new(1234229041343762513)]),
+                channels: None,
+                channel_whitelist: false,
+            },
+            say: CommandRules {
+                roles: Some(vec![RoleId::new(1053019464075063327)]),
+                channels: None,
+                channel_whitelist: false,
+            },
+        }
+    }
+}
+
+#[derive(Debug)]
 pub struct Config {
     pub log_dir: String,
     pub logger: Logger,
     pub token: String,
     pub guild_id: GuildId,
     pub intents: GatewayIntents,
+    pub commands: CommandsConfig,
 
     // Event Log Channels
     pub ready_event_channel: ChannelId,
@@ -22,12 +65,6 @@ pub struct Config {
     // Misc Log Channels
     pub commands_synced_channel: ChannelId,
     pub shutdown_channel: ChannelId,
-
-    // Command roles
-    pub avatar_roles: Vec<RoleId>,
-    pub embed_roles: Vec<RoleId>,
-    pub purge_roles: Vec<RoleId>,
-    pub say_roles: Vec<RoleId>,
 }
 
 impl Config {
@@ -50,6 +87,7 @@ impl Config {
             token: std::env::var("DISCORD_TOKEN").expect("Missing token in .env file"),
             guild_id: GuildId::new(1018921751691923536),
             intents: GatewayIntents::all(),
+            commands: Default::default(),
 
             // Event Log Channels
             ready_event_channel: bot_status_channel,
@@ -60,12 +98,6 @@ impl Config {
             // Misc Log Channels
             commands_synced_channel: bot_status_channel,
             shutdown_channel: bot_status_channel,
-
-            // Command roles
-            avatar_roles: vec![RoleId::new(1233889604436754525)],
-            embed_roles: vec![RoleId::new(1237741325462405223)],
-            purge_roles: vec![RoleId::new(1234229041343762513)],
-            say_roles: vec![RoleId::new(1053019464075063327)],
         }
     }
 }
