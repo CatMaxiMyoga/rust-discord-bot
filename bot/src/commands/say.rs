@@ -1,8 +1,8 @@
-use utils::shared_types::{CommandsExport, Context, Error};
 use crate::CONFIG;
+use utils::shared_types::{CommandsExport, Context, Error};
 
 async fn check(ctx: Context<'_>) -> Result<bool, Error> {
-    Ok(utils::check_role(CONFIG.say_roles.clone(), &ctx, &CONFIG.logger).await)
+    Ok(utils::checks::check_role(CONFIG.say_roles.clone(), &ctx, &CONFIG.logger).await)
 }
 
 /// Make the bot send a message.

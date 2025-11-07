@@ -1,3 +1,4 @@
+use crate::CONFIG;
 use poise::{
     CreateReply,
     serenity_prelude::{self as serenity, CreateEmbedAuthor},
@@ -5,12 +6,11 @@ use poise::{
 use regex::Regex;
 use serenity::builder::CreateEmbed;
 use utils::shared_types::{CommandsExport, Context, Error};
-use crate::CONFIG;
 
 type EmbedField = (String, String, bool);
 
 async fn check(ctx: Context<'_>) -> Result<bool, Error> {
-    Ok(utils::check_role(CONFIG.embed_roles.clone(), &ctx, &CONFIG.logger).await)
+    Ok(utils::checks::check_role(CONFIG.embed_roles.clone(), &ctx, &CONFIG.logger).await)
 }
 
 /// Send a message with an embed.
