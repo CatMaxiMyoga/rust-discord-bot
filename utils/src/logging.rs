@@ -14,14 +14,9 @@ lazy_static! {
 
 /// Defines a 24-bit color with 8-bit rgb components.
 #[derive(Debug, Clone, Eq, PartialEq)]
-struct Color(u8, u8, u8);
+struct Color(pub u8, pub u8, pub u8);
 
 impl Color {
-    /// Create a Color from 8-bit rgb components.
-    pub fn rgb(r: u8, g: u8, b: u8) -> Self {
-        Self(r, g, b)
-    }
-
     /// Create a Color from a hex string (e.g., "#RRGGBB" or "RRGGBB").
     /// Accepts both 3-digit and 6-digit hex codes.
     pub fn hex(hex: &str) -> Option<Self> {
@@ -31,12 +26,12 @@ impl Color {
             let r = u8::from_str_radix(&hex[0..2], 16).ok()?;
             let g = u8::from_str_radix(&hex[2..4], 16).ok()?;
             let b = u8::from_str_radix(&hex[4..6], 16).ok()?;
-            Some(Self::rgb(r, g, b))
+            Some(Self(r, g, b))
         } else if hex.len() == 3 {
             let r = u8::from_str_radix(&hex[0..1].repeat(2), 16).ok()?;
             let g = u8::from_str_radix(&hex[1..2].repeat(2), 16).ok()?;
             let b = u8::from_str_radix(&hex[2..3].repeat(2), 16).ok()?;
-            Some(Self::rgb(r, g, b))
+            Some(Self(r, g, b))
         } else {
             None
         }
@@ -50,7 +45,7 @@ impl Color {
 
 impl Default for Color {
     fn default() -> Self {
-        Self::rgb(255, 255, 255)
+        Self(255, 255, 255)
     }
 }
 
@@ -94,14 +89,14 @@ pub struct LoggingFormat {
 impl Default for LoggingFormat {
     fn default() -> Self {
         let mut default_colors: HashMap<LogLevel, Color> = HashMap::new();
-        default_colors.insert(LogLevel::Debug, Color::rgb(0, 255, 255));
-        default_colors.insert(LogLevel::Info, Color::rgb(0, 255, 0));
-        default_colors.insert(LogLevel::Warn, Color::rgb(255, 255, 0));
-        default_colors.insert(LogLevel::Error, Color::rgb(255, 0, 0));
+        default_colors.insert(LogLevel::Debug, Color(0, 255, 255));
+        default_colors.insert(LogLevel::Info, Color(0, 255, 0));
+        default_colors.insert(LogLevel::Warn, Color(255, 255, 0));
+        default_colors.insert(LogLevel::Error, Color(255, 0, 0));
 
         Self {
             template: String::from("*[{{timestampc}}] [{{levelc}}]* {{messagec}}"),
-            timestamp_color: Color::rgb(100, 100, 100),
+            timestamp_color: Color(100, 100, 100),
             timestamp_format: String::from("%Y-%m-%d %H:%M:%S %Z"),
             timezone: DEFAULT_TIMEZONE,
             level_colors: default_colors.clone(),
