@@ -5,18 +5,27 @@ use once_cell::sync::Lazy;
 use poise::serenity_prelude::{ChannelId, GatewayIntents, GuildId, RoleId};
 use crate::logging::Logger;
 
+/// Rules for a specific command
 #[derive(Debug)]
 pub struct CommandRules {
+    /// Roles needed to use the command. If None, no role restriction.
     pub roles: Option<Vec<RoleId>>,
+    /// Channels where the command can/cannot be used. If None, no channel restriction.
     pub channels: Option<Vec<ChannelId>>,
+    /// Whether the `channels` list is a whitelist (true) or blacklist (false)
     pub channel_whitelist: bool,
 }
 
+/// Configuration for all commands
 #[derive(Debug)]
 pub struct CommandsConfig {
+    /// Configuration for the avatar command
     pub avatar: CommandRules,
+    /// Configuration for the embed command
     pub embed: CommandRules,
+    /// Configuration for the purge command
     pub purge: CommandRules,
+    /// Configuration for the say command
     pub say: CommandRules,
 }
 
@@ -47,23 +56,43 @@ impl Default for CommandsConfig {
     }
 }
 
+/// The main configuration struct
 #[derive(Debug)]
 pub struct Config {
+    // ┌───────────────────────┐
+    // │ General Configuration │
+    // └───────────────────────┘
+    /// The directory where log files are stored
     pub log_dir: String,
+    /// The logger instance
     pub logger: Logger,
+    /// The Discord bot token
     pub token: String,
+    /// The guild ID the bot operates in
     pub guild_id: GuildId,
+    /// The gateway intents the bot uses
     pub intents: GatewayIntents,
+    /// Configuration for commands
     pub commands: CommandsConfig,
 
-    // Event Log Channels
+    // ┌────────────────────┐
+    // │ Event Log Channels │
+    // └────────────────────┘
+    /// Channel for ready events
     pub ready_event_channel: ChannelId,
 
-    // Command Log Channels
+    // ┌──────────────────────┐
+    // │ Command Log Channels │
+    // └──────────────────────┘
+    /// Channel for purge command logs
     pub purge_command_channel: ChannelId,
 
-    // Misc Log Channels
+    // ┌───────────────────┐
+    // │ Misc Log Channels │
+    // └───────────────────┘
+    /// Channel for command sync logs
     pub commands_synced_channel: ChannelId,
+    /// Channel for shutdown logs
     pub shutdown_channel: ChannelId,
 }
 
