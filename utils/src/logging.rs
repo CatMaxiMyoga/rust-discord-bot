@@ -14,7 +14,7 @@ lazy_static! {
 
 /// Defines a 24-bit color with 8-bit rgb components.
 #[derive(Debug, Clone, Eq, PartialEq)]
-struct Color(pub u8, pub u8, pub u8);
+pub struct Color(pub u8, pub u8, pub u8);
 
 impl Color {
     /// Create a Color from a hex string (e.g., "#RRGGBB" or "RRGGBB").
