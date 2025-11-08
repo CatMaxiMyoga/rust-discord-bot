@@ -3,7 +3,7 @@
 use dotenv::dotenv;
 use once_cell::sync::Lazy;
 use poise::serenity_prelude::{ChannelId, GatewayIntents, GuildId, RoleId};
-use utils::logging::Logger;
+use crate::logging::Logger;
 
 #[derive(Debug)]
 pub struct CommandRules {
