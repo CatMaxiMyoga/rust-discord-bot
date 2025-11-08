@@ -14,20 +14,12 @@ lazy_static! {
 
 /// Defines a 24-bit color with 8-bit rgb components.
 #[derive(Debug, Clone, Eq, PartialEq)]
-pub struct Color {
-    red: u8,
-    green: u8,
-    blue: u8,
-}
+struct Color(u8, u8, u8);
 
 impl Color {
     /// Create a Color from 8-bit rgb components.
     pub fn rgb(r: u8, g: u8, b: u8) -> Self {
-        Self {
-            red: r,
-            green: g,
-            blue: b,
-        }
+        Self(r, g, b)
     }
 
     /// Create a Color from a hex string (e.g., "#RRGGBB" or "RRGGBB").
@@ -52,7 +44,7 @@ impl Color {
 
     /// Generate and return the ANSI escape code for this color.
     pub fn ansi_code(&self) -> String {
-        format!("\x1b[38;2;{};{};{}m", self.red, self.green, self.blue)
+        format!("\x1b[38;2;{};{};{}m", self.0, self.1, self.2)
     }
 }
 
