@@ -15,16 +15,16 @@ pub async fn check(
         return false;
     };
 
-    if let Some(roles) = command_rules.roles {
-        if !check_roles(roles, &ctx, guild_id).await {
-            return false;
-        }
+    if let Some(roles) = command_rules.roles
+        && !check_roles(roles, ctx, guild_id).await
+    {
+        return false;
     }
 
-    if let Some(channels) = command_rules.channels {
-        if !check_channels(channels, command_rules.channel_whitelist, &ctx).await {
-            return false;
-        }
+    if let Some(channels) = command_rules.channels
+        && !check_channels(channels, command_rules.channel_whitelist, ctx).await
+    {
+        return false;
     }
 
     true
